@@ -22,21 +22,3 @@ stations <- stations %>% select(-c(V6,geo,loc2)) %>% rename(lat=V4,lon=V5)
 data <- left_join(data,stations,by="loc")
 
 write.csv(data,"geocoded_date.csv")
-
-townhalldata <- data %>% filter(loc=="Town Hall Station",date=="20160725")
-townhalldata$latlon <- paste(townhalldata$lat,townhalldata$lon,sep = ",")
-write.csv(townhalldata,"townhalldata.csv")
-townhalldatajson <- townhalldata %>% toJSON()
-write_json(townhalldatajson,"townhalldata.json")
-
-data %>% filter(loc=="Town Hall Station") %>% 
-  ggplot(aes(x=time,y=count,fill=tap)) +  
-  geom_histogram(stat = "identity",position = "dodge") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  facet_grid(date ~. )
-
-
-data %>% filter(loc=="Town Hall Station",date=="20160730")
-
-d3_data <- data %>% filter(date=="20160730",tap=="on") %>% arrange(time)
-write.csv(d3_data,"d3-data.csv")
